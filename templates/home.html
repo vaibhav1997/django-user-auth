@@ -3,6 +3,21 @@
 {% block title %}Sine!{% endblock %}
 
 {% block content %}
+<div class="posts">
+        <p id = "title">Loren Ipsum</p>
+        <p id = "bpost">Lorem ipsum dolor sit amet consectetur adipiscing elit euismod ac dictum, egestas odio nec risus posuere fusce cursus ultrices varius. Id etiam montes et est facilisi gravida mus interdum quis platea sem felis tempus dis bibendum, fermentum volutpat faucibus fringilla parturient primis semper justo netus per tortor nullam magna iaculis.</p>
+        <div id = "post-footer">
+            <input id="like-button" type = "submit" value="" name ="counter"/>
+            <!-- <div id = "like-button"> -->
+                
+                <!-- <img src="Resources/unlike.png"/> -->
+            <!-- </div> -->
+            <div id = "like-counter">93</div>
+            <input id="comment-button" type = "submit" value="" name ="counter"/>
+            <div id = "like-counter">46</div>   
+        </div>
+        <div id = "author">Loren Ipsum</div>
+    </div>
 <div class = "footer">
 {% if user.is_authenticated %}
   Hi {{ user.first_name}}! <br>
