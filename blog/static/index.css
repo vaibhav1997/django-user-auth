@@ -1,0 +1,84 @@
+body {
+    background-color: #d1ccc3;
+    display: grid;
+    
+}
+.bgsize {
+    width: 60%;
+    margin: 0 auto;
+    font-family: 'Lato', sans-serif;
+    /* border: 1px solid; */
+    /* color: #854c3a; */
+}
+.logo-hero {
+    width: 220px;
+    height: 220px;
+    margin-left: 37%;
+}
+
+
+/* .header {
+    width: 50%;
+    margin: 0 auto;
+    font-family: 'Lato', sans-serif;
+    color: #854c3a;
+} */
+/* .header img{
+    margin-left: 35%;
+    width: 20%;
+    height: 20%;
+}
+.header #title {
+    font-size: 25px;
+    padding-top: 3%;
+}
+.header #bpost {
+    font-size: 15px;
+    color: #205b77;
+}
+.header #post-footer {
+    float: left;
+}
+#like-button{
+    background: url(unlike.png) no-repeat;
+    background-size: contain;
+    width: 22px;
+    height: 22px; 
+}
+#like-button:hover {
+    background: url(like.png) no-repeat;
+    background-size: contain;
+    width: 22px;
+    height: 22px;  
+}
+.header #author {
+    float: right;
+}*/
+
+.footer {
+    /* margin-top: 15%;    */
+    bottom: 4%;
+    height: 50px;
+    position: absolute; 
+    margin-left: 60%;
+    
+}
+#footer-button {
+    background-color: #205b77;
+}
+
+.page-form {
+    width: 500px;
+    margin-left: 10%;
+    margin-top: -50px;
+}
+
+.login-form button {
+    margin-top: 40px;
+    float: right;
+}
+
+.login-form table td {
+    font-family: 'Lato', sans-serif;
+    font-size: 40px;
+}  */

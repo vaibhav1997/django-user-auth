@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Sine!{% endblock %}
+
+{% block content %}
+<div class = "footer">
+{% if user.is_authenticated %}
+  Hi {{ user.first_name}}! <br>
+  <a href="{% url 'logout' %}" class="waves-effect waves-light btn-small" id = "footer-button" >logout</a>
+  <a href="{% url 'blog' %}" class="waves-effect waves-light btn-small" id = "footer-button">Write a post</a>
+{% else %}
+  <!-- <p>You are not logged in</p> -->
+  <a href="{% url 'login' %}" class="waves-effect waves-light btn-small" id = "footer-button" >login</a> 
+  <a href="{% url 'signup' %}" class="waves-effect waves-light btn-small" id = "footer-button" >signup</a>
+</div>
+{% endif %}
+{% endblock %}
