@@ -32,6 +32,9 @@ body {
     font-size: 25px;
     padding-top: 3%;
 }
+a {
+    color: #854c3a;
+}
 #bpost {
     font-size: 15px;
     color: #205b77;
@@ -83,7 +86,7 @@ body {
     /* margin-top: 15%;    */
     bottom: 4%;
     height: 50px;
-    position: absolute; 
+    position: fixed; 
     margin-left: 60%;
     
 }
@@ -138,3 +141,7 @@ input[type=email]:not(.browser-default):focus:not([readonly]) {
 /* input[type=email]:required {
     border-bottom: 1px solid #205b77;
 } */
+.footer {
+    font-size:  20px;
+    color: #1b161c;
+}

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from .models import CustomUser, Post
+from django.forms import ModelForm
 
 class CustomUserCreationForm(UserCreationForm):
 
@@ -15,3 +16,9 @@ class CustomUserChangeForm(UserChangeForm):
         model = CustomUser
         fields = ('username', 'email')
         REQUIRED_FIELDS = ['email', 'first_name']
+
+class AddPost(ModelForm):
+    class Meta:
+        model = Post
+        fields = ('title', 'content', 'author',) #add 'imageurl'
+        REQUIRED_FIELDS = ['title', 'content', 'author']
