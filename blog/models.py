@@ -14,7 +14,7 @@ class Post(models.Model):
     author = models.CharField(max_length = 100)
     url = models.SlugField(max_length = 100, unique = True)
     likes = models.PositiveSmallIntegerField(default = 1)
-    # imageurl = models.CharField(max_length = 150, default = 1)
+    imageurl = models.CharField(max_length = 150, default = 1)
 
     def get_absolute_url(self):
         return self.url

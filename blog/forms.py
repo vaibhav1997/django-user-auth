@@ -20,5 +20,5 @@ class CustomUserChangeForm(UserChangeForm):
 class AddPost(ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'content', 'author',) #add 'imageurl'
+        fields = ('title', 'content', 'author','imageurl',) #add 'imageurl'
         REQUIRED_FIELDS = ['title', 'content', 'author']

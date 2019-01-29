@@ -3,16 +3,21 @@
     
     <div class="posts">
         <p id = "title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
-        <p id = "bpost">{{ post.content}}</p>
+        {% if post.imageurl == '1' %}
+        <p id = "bpost">{{ post.content|safe}}</p>
+        {% else %}
+        <p id = "bpost">{{ post.content|safe }}</p>
+        <p id = "bpost-image"><img src = "{{ post.imageurl }}"/></p>
+        {% endif %}
         <div id = "post-footer">
              <input id="like-button" type = "submit" value="" name ="counter"/>
             <!-- <div id = "like-button"> -->
                 
                 <!-- <img src="Resources/unlike.png"/> -->
             <!-- </div> -->
-            <div id = "like-counter">93</div>
+            <div id = "like-counter">{{ post.likes }}</div>
             <input id="comment-button" type = "submit" value="" name ="counter"/>
-            <div id = "like-counter">46</div>   
+            <div id = "like-counter">0</div>   
         </div>
         <div id = "author">{{ post.author }}</div>
     </div>

@@ -21,7 +21,7 @@ body {
     /* width: 50%; */
     margin: 0 auto;
     font-family: 'Lato', sans-serif;
-    color: #854c3a;
+    color: #205b77;
 } 
 /* .header img{
     margin-left: 35%;
@@ -34,6 +34,9 @@ body {
 }
 a {
     color: #854c3a;
+}
+a:hover {
+    text-decoration: underline;
 }
 #bpost {
     font-size: 15px;
@@ -119,7 +122,10 @@ p label {
 form ul {
     font-family: 'Lato', sans-serif;
 }
-
+form textarea {
+    height: 200px;
+    border: 1px solid #9e9e9e;
+}
 
 input[type=text]:not(.browser-default):focus:not([readonly])  {
     border-bottom: 1px solid #205b77;
@@ -144,4 +150,9 @@ input[type=email]:not(.browser-default):focus:not([readonly]) {
 .footer {
     font-size:  20px;
     color: #1b161c;
+}
+
+code {
+    color: #696969;
+    margin-left: 10%;
 }
