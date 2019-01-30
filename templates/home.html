@@ -26,13 +26,13 @@
 {% endfor %}
 <div class = "footer">
 {% if user.is_authenticated %}
-  Hi {{ user.first_name}}! <br>
-  <a href="{% url 'logout' %}" class="waves-effect waves-light btn-small" id = "footer-button" >logout</a>
-  <a href="{% url 'blog' %}" class="waves-effect waves-light btn-small" id = "footer-button">Write a post</a>
+  <p class="hello-user">  Hi {{ user.first_name}}! </p>
+  <a href="{% url 'logout' %}" class="all-button">Logout</a>
+  <a href="{% url 'blog' %}" class="all-button">Write a post</a>
 {% else %}
   <!-- <p>You are not logged in</p> -->
-  <a href="{% url 'login' %}" class="waves-effect waves-light btn-small" id = "footer-button" >login</a> 
-  <a href="{% url 'signup' %}" class="waves-effect waves-light btn-small" id = "footer-button" >signup</a>
+  <a href="{% url 'login' %}" class="all-button">Login</a> 
+  <a href="{% url 'signup' %}" class="all-button">Signup</a>
 </div>
 {% endif %}
 {% endblock %}

@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>You've come to post your blog!</h2>
-<h4>Feel free to use HTML Tags! Django takes care of formatting!</h4>
+<h2>Create your post!</h2>
 <!-- <h4>This page is under construction!</h4> -->
 <form action = "{% url 'add_post' %}" method="POST">
     {% csrf_token %}
     {{ blog_form.media }}
     {{ blog_form.as_p }}
-    <button type="submit" class="waves-effect waves-light btn-small" id = "footer-button">Submit</button>
+    <button type="submit" class="all-button">Submit</button>
     
 
 </form>

@@ -7,7 +7,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.toolbarGroups = [
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
-		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+		{ name: 'editing', groups: [ 'find', 'selection', 'editing' ] },
 		{ name: 'forms', groups: [ 'forms' ] },
 		'/',
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
@@ -22,5 +22,5 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'about', groups: [ 'about' ] }
 	];
 
-	config.removeButtons = 'Save,NewPage,Print,Preview,Templates,PasteFromWord,TextField,Textarea,Select,Radio,Checkbox,Form,HiddenField,ImageButton,Button,BidiLtr,BidiRtl,Language,Flash,Table,Smiley,Iframe,ShowBlocks,Maximize,About';
+	config.removeButtons = 'Save,NewPage,Print,Preview,Templates,PasteFromWord,TextField,Textarea,Select,Radio,Checkbox,Form,HiddenField,ImageButton,Button,BidiLtr,BidiRtl,Language,Flash,Table,Smiley,Iframe,ShowBlocks,Scayt,Maximize,About';
 };
