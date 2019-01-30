@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}Sine!{% endblock %}
-
 {% block content %}
 {% for post in blogpost %}
 <div class="posts">
         <p id = "title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
-        {% if post.imageurl == '1' %}
+        {% if post.imageurl == '' %}
         <p id = "bpost">{{ post.content|truncatewords:15|striptags }}</p>
         {% else %}
         <p id = "bpost">{{ post.content|truncatewords:15|striptags }}</p>

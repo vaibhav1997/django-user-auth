@@ -3,7 +3,7 @@
     
     <div class="posts">
         <p id = "title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
-        {% if post.imageurl == '1' %}
+        {% if post.imageurl == '' %}
         <p id = "bpost">{{ post.content|safe}}</p>
         {% else %}
         <p id = "bpost">{{ post.content|safe }}</p>

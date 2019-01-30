@@ -5,6 +5,7 @@
 <!-- <h4>This page is under construction!</h4> -->
 <form action = "{% url 'add_post' %}" method="POST">
     {% csrf_token %}
+    {{ blog_form.media }}
     {{ blog_form.as_p }}
     <button type="submit" class="waves-effect waves-light btn-small" id = "footer-button">Submit</button>
     
