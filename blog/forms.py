@@ -32,10 +32,9 @@ class AddPost(ModelForm):
     class Meta:
         model = Post
         content = forms.CharField(widget = CKEditorUploadingWidget())
-        # imageurl = forms.CharField(label = 'Insert URL to display in homepage')
         # author = forms.CharField(widget = forms.Select(choices = AUTHOR_CHOICES))
         model = Post
-        fields = ('title', 'content', 'author','imageurl', 'category') #add 'imageurl'
+        fields = ('title', 'content', 'author','imageurl', 'uploadimg', 'category') #add 'imageurl'
         REQUIRED_FIELDS = ['title', 'content', 'author']
 
 # class CkEditorForm(forms.Form): #New

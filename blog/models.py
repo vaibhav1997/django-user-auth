@@ -36,6 +36,7 @@ class Post(models.Model):
     url = models.SlugField(max_length = 100, unique = True)
     likes = models.PositiveSmallIntegerField(default = 1)
     imageurl = models.CharField(max_length = 150, blank = True)
+    uploadimg = models.ImageField(upload_to = 'uploads/%Y/%m/%d/', blank = True)
     category = models.CharField(max_length = 15, choices = CATEGORIES, default = "Not Categorized")
     commentcounter = models.PositiveSmallIntegerField(editable = False, default = 0)
 
@@ -54,6 +55,7 @@ class Post(models.Model):
 class Comment(models.Model):
     comment_text = models.CharField(max_length = 150)
     title = models.ForeignKey(Post, on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now = True)
 
     # def save(self, *args, **kwargs): #New
     #     defTitle = get_object_or_404(Post)

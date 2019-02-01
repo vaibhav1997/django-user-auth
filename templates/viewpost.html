@@ -3,8 +3,11 @@
     
     <div class="posts">
         <p id = "title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
-        {% if post.imageurl == '' %}
+        {% if post.imageurl == '' and post.uploadimg == '' %}
         <p id = "bpost">{{ post.content|safe}}</p>
+        {% elif post.uploadimg != '' %}
+        <p id = "bpost">{{ post.content|safe }}</p>
+        <p id = "bpost-image"><img src = "{{ post.uploadimg.url }}"/></p>
         {% else %}
         <p id = "bpost">{{ post.content|safe }}</p>
         <p id = "bpost-image"><img src = "{{ post.imageurl }}"/></p>
@@ -26,7 +29,7 @@
         <!-- Comments section -->
         <p id="title">Comments</p>
         {% for com in comment %}
-        <div id="comment-section">{{ com.comment_text }}</div>
+        <div id="comment-section">{{ com.comment_text }}<p id="created_at">{{ com.created_at }}</p></div>
         {% endfor %}
         <!-- Form/Alter 1-->
         <form method="POST">

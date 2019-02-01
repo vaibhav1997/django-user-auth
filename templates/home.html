@@ -5,8 +5,11 @@
 {% for post in blogpost %}
 <div class="posts">
         <p id = "title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
-        {% if post.imageurl == '' %}
+        {% if post.uploadimg == '' and post.imageurl == '' %}
         <p id = "bpost">{{ post.content|truncatewords:15|striptags }}</p>
+        {% elif post.uploadimg != '' %}
+        <p id = "bpost">{{ post.content|truncatewords:15|striptags }}</p>
+        <p id = "bpost-image"><img src = "{{ post.uploadimg.url }}"/></p>
         {% else %}
         <p id = "bpost">{{ post.content|truncatewords:15|striptags }}</p>
         <p id = "bpost-image"><img src = "{{ post.imageurl }}"/></p>

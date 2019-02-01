@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from .models import Post, Comment
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required  #Use only when page view (True) for login
 from .forms import CustomUserCreationForm, AddPost #PostComment
 # Create your views here.
 
@@ -11,9 +12,10 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
+@login_required
 def post(request):
     if request.method == 'POST':
-        form = AddPost(request.POST)
+        form = AddPost(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('http://127.0.0.1:8000')
@@ -28,6 +30,7 @@ def display(request):
     # comment_counter = Comment.objects.filter(title = blogcount.id).count()
     return render(request, 'home.html', {'blogpost': blogs})
 
+# @login_required
 def detailView(request, slug):
     blogs = get_object_or_404(Post, url = slug)
     comments = Comment.objects.filter(title = blogs.id)
