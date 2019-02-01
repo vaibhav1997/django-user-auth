@@ -17,9 +17,23 @@
             <!-- </div> -->
             <div id = "like-counter">{{ post.likes }}</div>
             <input id="comment-button" type = "submit" value="" name ="counter"/>
-            <div id = "like-counter">0</div>   
+            <div id = "like-counter">{{ ccounter }}</div>   
         </div>
         <div id = "author">{{ post.author }}</div>
+        <!-- Categories& Tags -->
+        <p id="title">Category</p>
+        <p id = "bpost">{{ post.category }}</p>
+        <!-- Comments section -->
+        <p id="title">Comments</p>
+        {% for com in comment %}
+        <div id="comment-section">{{ com.comment_text }}</div>
+        {% endfor %}
+        <!-- Form/Alter 1-->
+        <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="comments_area">
+                <button type="submit" class="all-button">Submit</button>
+            </form>
     </div>
     
 {% endblock %}

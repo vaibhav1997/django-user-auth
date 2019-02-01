@@ -7,6 +7,6 @@ urlpatterns = [
     path('post/', views.post, name = "blog"),
     path('post/', views.post, name = "add_post"),
     path('<slug:slug>', views.detailView, name = "detail_view"),
-    # path('post/', views.display)
+    # path('post/comments', views.commentView, name= "view_comments"),
 
 ]

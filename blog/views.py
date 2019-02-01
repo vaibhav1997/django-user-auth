@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
-from .models import Post
+from .models import Post, Comment
 from django.http import HttpResponse, HttpResponseRedirect
-
-from .forms import CustomUserCreationForm, AddPost
+from .forms import CustomUserCreationForm, AddPost #PostComment
 # Create your views here.
 
 class SignUp(generic.CreateView):
@@ -25,8 +24,40 @@ def post(request):
 
 def display(request):
     blogs = Post.objects.all()
+    # blogcount = get_object_or_404(Post)
+    # comment_counter = Comment.objects.filter(title = blogcount.id).count()
     return render(request, 'home.html', {'blogpost': blogs})
 
 def detailView(request, slug):
     blogs = get_object_or_404(Post, url = slug)
-    return render(request, 'viewpost.html', {'post': blogs})
+    comments = Comment.objects.filter(title = blogs.id)
+    comment_counter = Comment.objects.filter(title = blogs.id).count()
+    modCount = Post.objects.get(id = blogs.id)
+    if request.method == 'POST':
+        comtext = request.POST.get('comments_area')
+        newField = Comment(title = blogs, comment_text = comtext)
+        newField.save()
+
+        # form = PostComment(request.POST)
+        # if form.is_valid():
+            # Comment.objects.create(title = blogs) #New
+            # form.save()
+            
+        modCount.commentcounter += 1
+        modCount.save()
+
+        return redirect(request.path_info)
+    # else:
+        # form = PostComment()
+    return render(request, 'viewpost.html', {'post': blogs, 'comment': comments, 'ccounter': comment_counter}) #'view_form':form
+
+# def commentView(request):
+#     if request.method == 'POST':
+#         form = PostComment(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect(request.path_info)
+#     else:
+#         form = PostComment()
+
+#     return render(request, 'viewpost.html', {'view_form': form})

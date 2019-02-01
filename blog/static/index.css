@@ -131,20 +131,17 @@ form textarea {
     border: 1px solid #9e9e9e;
 }
 
-input[type=text]:not(.browser-default):focus:not([readonly])  {
-    border-bottom: 1px solid #205b77;
+input[type=text] {
     box-shadow: none;
+    width: 700px;
 }
-input[type=password]:not(.browser-default):focus:not([readonly]) {
-    border-bottom: 1px solid #205b77;
-    box-shadow: none;
-}
+
 .page-form {
     margin-left: 20%;
 } 
 
-input[type=email]:not(.browser-default):focus:not([readonly]) {
-    border-bottom: 1px solid #205b77;
-    box-shadow: none;
-
-} 
+#comment-section {
+    margin-top: 20px;
+    width: 50%;
+    margin-left: 25%; 
+}
