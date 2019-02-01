@@ -1,5 +1,7 @@
-Django - User Authentication
->>Simple User Authentication using Django User Models and forms
-Only UI Mod required!
+Django - User Authentication for a blog
+    Extended to include comments
+    Likes - broken (Need Changes)
+Note: Images belong to their respective distributors
+
 
 
