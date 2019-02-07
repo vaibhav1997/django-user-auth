@@ -33,7 +33,7 @@ class Post(models.Model):
     content = RichTextUploadingField()
     
     author = models.CharField(max_length = 50, choices = AUTHOR_CHOICES)
-    url = models.SlugField(max_length = 100, unique = True)
+    url = models.SlugField(max_length = 100, unique = True, editable = False)
     likes = models.PositiveSmallIntegerField(default = 1)
     imageurl = models.CharField(max_length = 150, blank = True)
     uploadimg = models.ImageField(upload_to = 'uploads/%Y/%m/%d/', blank = True)

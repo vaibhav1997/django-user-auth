@@ -37,6 +37,9 @@
                 <input type="text" name="comments_area">
                 <button type="submit" class="all-button">Submit</button>
             </form>
+            <p>
+            <a href="{% url 'edit_post' post.id %}" class="all-button" id = "edit-button">Edit Post</a> 
+            </p>
     </div>
     
 {% endblock %}

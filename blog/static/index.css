@@ -150,3 +150,8 @@ input[type=text] {
     color: #848482;
     float: right;
 }
+#edit-button {
+    font-family: 'Lato', sans-serif;
+    text-decoration: none;
+    color: #ffffff;
+}

@@ -8,6 +8,7 @@ urlpatterns = [
     path('signup/', views.SignUp.as_view(), name = 'signup'),
     path('post/', views.post, name = "blog"),
     path('post/', views.post, name = "add_post"),
+    path('post/<int:post_id>', views.editpost, name = "edit_post"),
     path('<slug:slug>', views.detailView, name = "detail_view"),
     # path('post/comments', views.commentView, name= "view_comments"),
 

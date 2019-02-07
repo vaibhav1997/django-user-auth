@@ -20,13 +20,6 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('username', 'email')
         REQUIRED_FIELDS = ['email', 'first_name']
 
-# AUTHOR_CHOICES = [
-#             ('John','John'),
-#             ('Dev','Dev'),
-#             ('Amy','Amy'),
-#             ('Eva','Eva'),
-#         ]
-
 class AddPost(ModelForm):
    
     class Meta:
@@ -37,14 +30,16 @@ class AddPost(ModelForm):
         fields = ('title', 'content', 'author','imageurl', 'uploadimg', 'category') #add 'imageurl'
         REQUIRED_FIELDS = ['title', 'content', 'author']
 
-# class CkEditorForm(forms.Form): #New
-#     content = RichTextUploadingFormField()
 
+class EditPost(ModelForm):
 
-
-# class PostComment(ModelForm):
-
-#     class Meta:
-#         model = Comment
-#         fields = ( 'comment_text',)  #Add Title
-        
+    class Meta:
+        model = Post
+        content = forms.CharField(widget = CKEditorUploadingWidget())
+        model = Post
+        fields = ('title', 'content', 'author','imageurl', 'uploadimg', 'category') #add 'imageurl'
+    def __init__(self, *args, **kwargs):
+        super(EditPost, self).__init__(*args, **kwargs)
+        uneditable_fields = ['title']
+        for field in uneditable_fields:
+            self.fields[field].widget.attrs['readonly'] = 'true'
