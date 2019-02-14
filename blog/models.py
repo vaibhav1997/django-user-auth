@@ -38,7 +38,9 @@ class Post(models.Model):
     imageurl = models.CharField(max_length = 150, blank = True)
     uploadimg = models.ImageField(upload_to = 'uploads/%Y/%m/%d/', blank = True)
     category = models.CharField(max_length = 15, choices = CATEGORIES, default = "Not Categorized")
-    commentcounter = models.PositiveSmallIntegerField(editable = False, default = 0)
+    tags = models.CharField(max_length = 75, blank = True)
+    commentcounter = models.PositiveSmallIntegerField(editable = True, default = 0)
+
 
     def get_absolute_url(self):
         return self.url

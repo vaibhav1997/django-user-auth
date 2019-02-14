@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     
     <div class="posts">
@@ -13,30 +14,101 @@
         <p id = "bpost-image"><img src = "{{ post.imageurl }}"/></p>
         {% endif %}
         <div id = "post-footer">
-             <input id="like-button" type = "submit" value="" name ="counter"/>
+            {% block javascript %}
+                <script type='text/javascript'
+                src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+            <script>
+                $(function() {
+                $('.like-button').click(function(){
+                    if($(this).hasClass('active')){
+                      $(this).removeClass('active')
+                    } else {
+                      $(this).addClass('active')
+                    }
+                  });
+                });
+            </script>
+            
+             <input class="like-button" type = "submit" value="" placeholder="" name ="licounter"/>
             <!-- <div id = "like-button"> -->
                 
                 <!-- <img src="Resources/unlike.png"/> -->
             <!-- </div> -->
             <div id = "like-counter">{{ post.likes }}</div>
+            <!-- comments -->
             <input id="comment-button" type = "submit" value="" name ="counter"/>
-            <div id = "like-counter">{{ ccounter }}</div>   
+            <div class = "commcounter" id = "like-counter">{{ ccounter }}</div>   
         </div>
         <div id = "author">{{ post.author }}</div>
         <!-- Categories& Tags -->
         <p id="title">Category</p>
         <p id = "bpost">{{ post.category }}</p>
-        <!-- Comments section -->
-        <p id="title">Comments</p>
-        {% for com in comment %}
-        <div id="comment-section">{{ com.comment_text }}<p id="created_at">{{ com.created_at }}</p></div>
-        {% endfor %}
-        <!-- Form/Alter 1-->
-        <form method="POST">
-                {% csrf_token %}
-                <input type="text" name="comments_area">
-                <button type="submit" class="all-button">Submit</button>
-            </form>
+        <p id="title">Tags</p>
+        <p id = "bpost">{{ post.tags }}</p>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $("#subform").on("click", function(e){
+            // console.log("Button clicked")
+            e.preventDefault();
+            var comments = $("#comments_area").val()
+            $.ajax({
+                type: "GET",
+                url: "",
+                data: {
+                    "comments_area": comments
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+                    var date_time = new Date(data.created_date), 
+                    hours = date_time.getHours(), 
+                    mins = date_time.getMinutes(),
+                    month = date_time.toLocaleString('en-us', { month: 'long' }),
+                    month = month.slice(0,3),
+                    year = date_time.getFullYear();
+                    d = date_time.toLocaleDateString('en-us');
+                    day = d.slice(2,4);
+                    time = moment(date_time).locale('en').format("h:mm A");
+                    console.log(typeof(time))
+                    time = String(time)
+                    if(time.includes("PM")){
+                        time = time.replace("PM", "p.m.")};
+                    if(time.includes("AM")){
+                        time = time.replace("AM", "a.m.")};
+                    var finalDate = month+". " + day+", " + year+"," + time;
+                    $(".commcounter").text(data.count);
+                    $("#comments-text").append("<div id='comment-section'>" + data.text + "<p id='created_at'>" + finalDate + "</p></div>");
+
+                },
+                complete: function(){
+                    $("#comments_area").val('');
+                }
+            // })
+        });
+        });
+    });
+        
+        </script>
+        {% endblock %}
+        <div id = "commentss">
+            <!-- Comments section -->
+            <p class = "comments" id="title">Comments</p>
+            <div id = "comments-text">
+            {% for com in comment %}
+            <div id="comment-section">{{ com.comment_text }}<p id="created_at">{{ com.created_at }}</p></div>
+            {% endfor %}
+            </div>
+
+            <form method="GET">
+                    <!-- ""csrf_token %} -->
+                    <input type="text" id="comments_area" ><!--name="comments_area"-->
+                    <button type="submit" class="all-button" id="subform">Submit</button>
+             </form>
+        </div>
+       
             <p>
             <a href="{% url 'edit_post' post.id %}" class="all-button" id = "edit-button">Edit Post</a> 
             </p>

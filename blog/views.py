@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, render_to_resp
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import Post, Comment
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required  #Use only when page view (True) for login
 from .forms import CustomUserCreationForm, AddPost, EditPost 
 # Create your views here.
@@ -49,31 +49,35 @@ def detailView(request, slug):
     comments = Comment.objects.filter(title = blogs.id)
     comment_counter = Comment.objects.filter(title = blogs.id).count()
     modCount = Post.objects.get(id = blogs.id)
-    if request.method == 'POST':
-        comtext = request.POST.get('comments_area')
+    
+   
+    # if request.method == 'POST':
+    if request.is_ajax():
+        # message = "hello"
+        # Now----
+        comtext = request.GET.get('comments_area')
+
         newField = Comment(title = blogs, comment_text = comtext)
         newField.save()
+        # Now -----------
 
         # form = PostComment(request.POST)
         # if form.is_valid():
             # Comment.objects.create(title = blogs) #New
             # form.save()
-            
+        # # Now -------
         modCount.commentcounter += 1
         modCount.save()
+        data = {"count":modCount.commentcounter, "text":newField.comment_text, "created_date":newField.created_at}
+        return JsonResponse(data)
 
-        return redirect(request.path_info)
-    # else:
-        # form = PostComment()
-    return render(request, 'viewpost.html', {'post': blogs, 'comment': comments, 'ccounter': comment_counter}) #'view_form':form
+        # return redirect(request.path_info) #Uncomment?
+        # Now-----------------
+    else:
+        return render(request, 'viewpost.html', {'post': blogs, 'comment': comments, 'ccounter': comment_counter}) #'view_form':form
+    #     # form = PostComment()
+    
 
-# def commentView(request):
-#     if request.method == 'POST':
-#         form = PostComment(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect(request.path_info)
-#     else:
-#         form = PostComment()
-
-#     return render(request, 'viewpost.html', {'view_form': form})
+def vCom(request):
+    if request.is_ajax():
+        return render(request, 'comments.html')

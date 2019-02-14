@@ -27,7 +27,7 @@ class AddPost(ModelForm):
         content = forms.CharField(widget = CKEditorUploadingWidget())
         # author = forms.CharField(widget = forms.Select(choices = AUTHOR_CHOICES))
         model = Post
-        fields = ('title', 'content', 'author','imageurl', 'uploadimg', 'category') #add 'imageurl'
+        fields = ('title', 'content', 'author','imageurl', 'uploadimg', 'category', 'tags') #add 'imageurl'
         REQUIRED_FIELDS = ['title', 'content', 'author']
 
 
