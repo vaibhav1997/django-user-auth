@@ -5,6 +5,9 @@ from .models import Post, Comment
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required  #Use only when page view (True) for login
 from .forms import CustomUserCreationForm, AddPost, EditPost 
+from django.db.models import Q
+from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 class SignUp(generic.CreateView):
@@ -39,9 +42,20 @@ def editpost(request, post_id):
 
 def display(request):
     blogs = Post.objects.all()
-    # blogcount = get_object_or_404(Post)
-    # comment_counter = Comment.objects.filter(title = blogcount.id).count()
-    return render(request, 'home.html', {'blogpost': blogs})
+
+    paginator = Paginator(blogs, 3)
+    page = request.GET.get('page')
+    disp = paginator.get_page(page)
+    # disp = paginate.page(1)
+    # if request.is_ajax():
+    #     pageNo = request.GET.get("page")
+    #     disp = paginate.page(pageNo)
+    #     # ranges = {"page-range":paginate.page_range}
+    #     data = serializers.serialize('json', disp)
+    #     return HttpResponse(data)
+
+    return render(request, 'home.html', {'blogpost': disp})
+    
 
 # @login_required
 def detailView(request, slug):
@@ -81,3 +95,11 @@ def detailView(request, slug):
 def vCom(request):
     if request.is_ajax():
         return render(request, 'comments.html')
+
+def searchQuery(request):
+    if request.is_ajax():
+        searchText = request.POST.get("search_area")
+        results = Post.objects.filter(Q(title__icontains=searchText) | Q(content__icontains=searchText) | Q(author__icontains=searchText))
+        data = serializers.serialize('json', results)
+        return HttpResponse(data)
+

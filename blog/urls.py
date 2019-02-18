@@ -11,6 +11,7 @@ urlpatterns = [
     path('post/<int:post_id>', views.editpost, name = "edit_post"),
     path('<slug:slug>', views.detailView, name = "detail_view"),
     path('post/comments', views.vCom, name = "commentsonly"),
+    path('post/search', views.searchQuery, name = "search_results"),
     # path('post/comments', views.commentView, name= "view_comments"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

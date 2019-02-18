@@ -5,7 +5,7 @@ body {
 }
 .bgsize {
     width: 55%;
-    margin: 0 auto;
+    margin-left: 10%;
     font-family: 'Lato', sans-serif;
 }
 
@@ -17,7 +17,7 @@ body {
 
 
 .posts {
-    margin: 0 auto;
+    margin-left: 0 auto;
     font-family: 'Lato', sans-serif;
     color: #1c151c;
 } 
@@ -153,4 +153,34 @@ input[type=text] {
     font-family: 'Lato', sans-serif;
     text-decoration: none;
     color: #ffffff;
+}
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(245, 245, 245);
+    background-color: rgba(245, 245, 245, 0.966);
+    overflow-x: hidden;
+    margin-left: 20px;
+    margin-top: 50px;
+  }
+
+#display-results {
+    margin-left: 5%; 
+    padding-top: -15px;
+}
+#display-results #title {
+    font-size: 20px;
+    margin-top: -25px;
+}
+#load-button {
+    margin-left: 20%;
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 10px;
+
+    
 }

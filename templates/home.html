@@ -2,8 +2,10 @@
 
 {% block title %}Sine!{% endblock %}
 {% block content %}
-{% for post in blogpost %}
+
 <div class="posts">
+{% for post in blogpost %}
+
         <p id = "title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
         {% if post.uploadimg == '' and post.imageurl == '' %}
         <p id = "bpost">{{ post.content|truncatewords:15|striptags }}</p>
@@ -16,26 +18,246 @@
         {% endif %}
         <div id = "post-footer">
              <input class="like-button" type = "submit" value="" name ="counter"/>
-            <!-- <div id = "like-button"> -->
-                
-                <!-- <img src="Resources/unlike.png"/> -->
-            <!-- </div> -->
             <div id = "like-counter">{{ post.likes }}</div>
             <input id="comment-button" type = "submit" value="" name ="counter"/>
             <div id = "like-counter">{{ post.commentcounter }}</div>   
         </div>
         <div id = "author">{{ post.author }}</div>
-    </div>
+    
+    
 {% endfor %}
+</div>
+
+<!-- Overlay for search -->
+<div class = "overlay" id="nav">
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" id="search-area">
+        <a class="all-button" id="search-query" type="submit">Search</a>
+    </form>
+    <div class = "posts">
+    <div id="display-results">
+        
+    </div>
+    </div>
+    <p><a class="all-button" id = "close">Close</a></p>
+</div>
+<br>
+
+<!-- <a id = "load-button-left" class="all-button">End</a>
+<text id="load-button">1</text>
+<a id = "load-button-right" class="all-button">></a> -->
+<div id="pageNo">
+        <div class="pagination">
+                <span class="step-links">
+                    {% if blogpost.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ blogpost.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                            {% for page in blogpost.paginator.page_range %}
+                                {% if forloop.counter != 1 %} | {% endif %}
+                                <a href="?page={{page}}">{{ page }}</a>
+                            {% endfor %}
+                    </span>
+            
+                    {% if blogpost.has_next %}
+                        <a href="?page={{ blogpost.next_page_number }}">next</a>
+                        <a href="?page={{ blogpost.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+</div>
+
 <div class = "footer">
 {% if user.is_authenticated %}
   <p class="hello-user">  Hi {{ user.first_name}}! </p>
   <a href="{% url 'logout' %}" class="all-button">Logout</a>
   <a href="{% url 'blog' %}" class="all-button">Write a post</a>
+  <a class="all-button" id="search-button">Search</a>
 {% else %}
   <!-- <p>You are not logged in</p> -->
   <a href="{% url 'login' %}" class="all-button">Login</a> 
   <a href="{% url 'signup' %}" class="all-button">Signup</a>
 </div>
 {% endif %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    
+    $("#search-button").click(function() {
+        document.getElementById("nav").style.width = "100%";
+        
+    })
+    $("#close").click(function() {
+        document.getElementById("nav").style.width = "0%";
+        document.getElementById("display-results").innerHTML = "";
+    })
+    $("#search-query").on("click", function(e){
+        e.preventDefault();
+        document.getElementById("display-results").innerHTML = "";
+        search = $("#search-area").val();
+        var words = $("#search-area").val().split(" ");
+        for(var i=0; i<words.length; i++) {
+        console.log(words[i]);
+        $.ajax({
+                headers: {
+                    'X-CSRFToken': Cookies.get('csrftoken')
+                },
+                async: false,
+                type: "POST",
+                url: "{% url 'search_results' %}",
+
+                data: {
+                    "search_area": words[i]
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    if(data == "") {
+                        console.log("empty");
+                        $("#display-results").append("<p id=title>Oops! No matches. :(</p>");
+                    } else {
+                        $("#display-results").append("<p id=title><u>Found all references of '" + words[i] + "'</u></p>"); 
+                        $.each(data, function(i, item){
+                        console.log(data[i].fields.url);
+                        $("#display-results").append("<p id=title><a href='" + data[i].fields.url + "'>" + data[i].fields.title + "</a></p>");
+                        
+                    })
+                }
+                },
+                complete: $("#search-area").val('')
+
+        })
+    }
+    })
+    var pg = 1;
+    $("#load-button-right").click(function(){
+        pg +=1;
+        console.log("current page:" + pg);
+        $.ajax({
+                type: "GET",
+                url: "",
+
+                data: {
+                    "page": pg
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    // data = data.toString()
+                    console.log(data)
+                    console.log("No. of keys:" +data.length);
+                    if(data.length < 3) {
+                        console.log("No next page");
+                        $("#load-button-right").text("End")
+                    }
+                    if(pg >= 1) {
+                        $("#load-button-left").text("<")
+                    } 
+                    $.each(data, function(i, item){
+                        
+                        var blogContent = data[i].fields.content.substring(0,100) + '...';
+                        var cleanContent = blogContent.replace(/<\/?[^>]+(>|$)/g, "");
+                        if(i == 0) {
+                            // console.log(data[i].fields.imageurl)
+                            if(data[i].fields.imageurl == "" && data[i].fields.uploadimg =="") {
+                                console.log("Empty")
+                                $(".posts").html("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")        
+                            }
+                            if(data[i].fields.imageurl != "") {
+                            console.log("not empty")
+                            $(".posts").html("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><p id = bpost-image><img src =" + data[i].fields.imageurl + "/></p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")    
+                            }
+                            if(data[i].fields.uploadimg != "") {
+                            console.log("not empty")
+                            $(".posts").html("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><p id = bpost-image><img src =media/" + data[i].fields.uploadimg + "/></p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")    
+                            }
+                        } else {
+                            if(data[i].fields.imageurl == "" && data[i].fields.uploadimg =="") {
+                                console.log("Empty")
+                                $(".posts").append("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")        
+                            }
+                            if(data[i].fields.imageurl != "") {
+                            console.log("not empty")
+                            $(".posts").append("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><p id = bpost-image><img src =" + data[i].fields.imageurl + "/></p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")    
+                            }
+                            if(data[i].fields.uploadimg != "") {
+                            console.log("not empty")
+                            $(".posts").append("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><p id = bpost-image><img src =media/" + data[i].fields.uploadimg + "/></p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")    
+                            }
+                        $("#load-button").text(pg)
+                    }
+                    })
+                }
+
+        })
+    })
+    $("#load-button-left").click(function(){
+        if(pg == 1) {
+            console.log("no previous page")
+        } else {
+            pg -= 1;
+            $.ajax({
+                type: "GET",
+                url: "",
+
+                data: {
+                    "page": pg
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    console.log("No. of keys:" +data.length);
+                    if(pg == 1) {
+                        console.log("No next page")
+                        $("#load-button-left").text("End")
+                    }
+                    if(data.length >= 3) {
+                        $("#load-button-right").text(">")
+                    } 
+                    $.each(data, function(i, item){
+                        
+                        var blogContent = data[i].fields.content.substring(0,100) + '...';
+                        var cleanContent = blogContent.replace(/<\/?[^>]+(>|$)/g, "");
+                        if(i == 0) {
+                            // console.log(data[i].fields.imageurl)
+                            if(data[i].fields.imageurl == "" && data[i].fields.uploadimg =="") {
+                                console.log("Empty")
+                                $(".posts").html("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")        
+                            }
+                            if(data[i].fields.imageurl != "") {
+                            console.log("not empty")
+                            $(".posts").html("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><p id = bpost-image><img src =" + data[i].fields.imageurl + "/></p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")    
+                            }
+                            if(data[i].fields.uploadimg != "") {
+                            console.log("not empty")
+                            $(".posts").html("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><p id = bpost-image><img src =media/" + data[i].fields.uploadimg + "/></p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")    
+                            }
+                        } else {
+                            if(data[i].fields.imageurl == "" && data[i].fields.uploadimg =="") {
+                                console.log("Empty")
+                                $(".posts").append("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")        
+                            }
+                            if(data[i].fields.imageurl != "") {
+                            console.log("not empty")
+                            $(".posts").append("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><p id = bpost-image><img src =" + data[i].fields.imageurl + "/></p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")    
+                            }
+                            if(data[i].fields.uploadimg != "") {
+                            console.log("not empty")
+                            $(".posts").append("<p id=title><a href='"+ data[i].fields.url +"'>"+ data[i].fields.title +"</a></p>"+"<p id=bpost>"+ cleanContent +"</p><p id = bpost-image><img src =media/" + data[i].fields.uploadimg + "/></p><div id = 'post-footer'><input class='like-button' type='submit' value='' name='counter'/><div id =like-counter>" + data[i].fields.likes + "</div><input id='comment-button' type = 'submit' value='' name ='counter'/><div id = 'like-counter'>"+ data[i].fields.commentcounter +"</div></div>"+"<div id=author>" + data[i].fields.author + "</div>")    
+                            }
+                        $("#load-button").text(pg)
+                    }
+                    })
+                }
+
+        })
+
+        console.log("current page:"+pg)
+        }
+    })
+    
+})
+
+</script>
 {% endblock %}
